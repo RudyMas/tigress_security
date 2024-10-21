@@ -81,7 +81,6 @@ class Security
      */
     private static function pathMatches($urlPath, $referencePaths): bool
     {
-        $return = false;
         // Break down the URL path into an array
         $referer = parse_url($urlPath);
         $referees = explode('/', trim($referer['path'], '/')); // Trimming leading/trailing slashes
