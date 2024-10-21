@@ -10,7 +10,7 @@ use Random\RandomException;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 1.1.2
+ * @version 1.2.0
  * @lastmodified 2024-10-21
  * @package Tigress\Security
  */
@@ -25,7 +25,7 @@ class Security
      */
     public static function version(): string
     {
-        return '1.1.2';
+        return '1.2.0';
     }
 
     public function __construct()
@@ -64,9 +64,12 @@ class Security
      */
     public static function checkReferer(array $referencePaths): void
     {
-        $referenceOkay = self::pathMatches($_SERVER['HTTP_REFERER'], $referencePaths);
+        if (!isset($_SERVER['HTTP_REFERER'])) {
+            header('HTTP/1.0 403 Forbidden');
+            exit;
+        }
 
-        if (!$referenceOkay) {
+        if (!self::pathMatches($_SERVER['HTTP_REFERER'], $referencePaths)) {
             header('HTTP/1.0 403 Forbidden');
             exit;
         }
