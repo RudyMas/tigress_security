@@ -10,13 +10,13 @@ use Random\RandomException;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 1.1.0
- * @lastmodified 2024-10-10
+ * @version 1.1.1
+ * @lastmodified 2024-10-21
  * @package Tigress\Security
  */
 class Security
 {
-    private array $sites = ['localhost'];
+    private static array $sites = ['localhost'];
 
     /**
      * Get the version of the class
@@ -25,7 +25,16 @@ class Security
      */
     public static function version(): string
     {
-        return '1.1.0';
+        return '1.1.1';
+    }
+
+    public function __construct()
+    {
+        $sites = [];
+        foreach (CONFIG->servers as $server => $serverType) {
+            $sites[] = $server;
+        }
+        $this->setSites($sites);
     }
 
     /**
@@ -117,8 +126,8 @@ class Security
      * @param array $sites
      * @return void
      */
-    public function setSites(array $sites): void
+    public static function setSites(array $sites): void
     {
-        $this->sites = $sites;
+        self::$sites = $sites;
     }
 }
