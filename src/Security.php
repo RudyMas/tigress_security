@@ -5,13 +5,12 @@ namespace Tigress;
 use Random\RandomException;
 
 /**
- * Class Security (PHP version 8.3)
+ * Class Security (PHP version 8.4)
  *
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 1.2.0
- * @lastmodified 2024-10-21
+ * @version 2024.11.28.0
  * @package Tigress\Security
  */
 class Security
@@ -25,7 +24,7 @@ class Security
      */
     public static function version(): string
     {
-        return '1.2.0';
+        return '2024.11.28';
     }
 
     public function __construct()
@@ -78,11 +77,11 @@ class Security
     /**
      * Check if the request comes from a certain path
      *
-     * @param $urlPath
-     * @param $referencePaths
+     * @param string $urlPath
+     * @param array $referencePaths
      * @return bool
      */
-    private static function pathMatches($urlPath, $referencePaths): bool
+    private static function pathMatches(string $urlPath, array $referencePaths): bool
     {
         // Break down the URL path into an array
         $referer = parse_url($urlPath);
@@ -105,11 +104,11 @@ class Security
     /**
      * Check if the URL path matches the reference path
      *
-     * @param $referees
-     * @param $paths
+     * @param array $referees
+     * @param array $paths
      * @return bool
      */
-    private static function pathsMatch($referees, $paths): bool
+    private static function pathsMatch(array $referees, array $paths): bool
     {
         // If the reference path is shorter than the URL path and doesn't contain a wildcard, it's not a match
         if (count($paths) < count($referees)) {
