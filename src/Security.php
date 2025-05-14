@@ -10,7 +10,7 @@ use Random\RandomException;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024-2025, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 2025.02.10.0
+ * @version 2025.05.14.0
  * @package Tigress\Security
  */
 class Security
@@ -39,9 +39,10 @@ class Security
     /**
      * Check if the request comes from the website
      *
+     * @param array|null $destinationPaths Set this to the paths you want to bypass
      * @return void
      */
-    public function checkAccess(): void
+    public function checkAccess(?array $destinationPaths = null): void
     {
         if (isset($_SERVER['HTTP_REFERER'])) {
             $referer = parse_url($_SERVER['HTTP_REFERER']);
@@ -50,8 +51,16 @@ class Security
                 exit;
             }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            exit;
+            if (isset($destinationPaths)) {
+                if (!self::pathMatches($_SERVER['REQUEST_URI'], $destinationPaths)) {
+                    header('HTTP/1.0 403 Forbidden');
+                    exit;
+                }
+            } else {
+                header('HTTP/1.0 403 Forbidden');
+                exit;
+
+            }
         }
     }
 
