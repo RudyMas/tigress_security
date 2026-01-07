@@ -2,7 +2,6 @@
 
 namespace Tigress;
 
-use JetBrains\PhpStorm\NoReturn;
 use Random\RandomException;
 use Repository\SystemLockPagesRepo;
 use Repository\UsersRepo;
@@ -13,7 +12,7 @@ use Repository\UsersRepo;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024-2026, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 2026.01.07.0
+ * @version 2026.01.07.1
  * @package Tigress\Security
  */
 class Security
@@ -70,23 +69,25 @@ class Security
     }
 
     /**
-     * Check if a page is locked
+     *  Check if a page is locked
      *
      * @param string $resource
      * @param int $resourceId
      * @return bool
      */
-    #[NoReturn]
     public function checkIfPageIsLocked(string $resource, int $resourceId): bool
     {
-        // delete expired locks
         $systemLockPageRepo = new SystemLockPagesRepo();
+
+        $now = date('Y-m-d H:i:s');
+        $expires = date('Y-m-d H:i:s', time() + 300);
+
+        // delete expired locks
         $sql = "DELETE FROM system_lock_pages
                 WHERE expires_at < :current_time";
-        $keyBindings = [
-            ':current_time' => time()
-        ];
-        $systemLockPageRepo->deleteByQuery($sql, $keyBindings);
+        $systemLockPageRepo->deleteByQuery($sql, [
+            ':current_time' => $now
+        ]);
 
         $systemLockPageRepo->reset();
         $systemLockPageRepo->loadByPrimaryKey([
@@ -100,30 +101,32 @@ class Security
             $systemLockPage->resource = $resource;
             $systemLockPage->resource_id = $resourceId;
             $systemLockPage->locked_by_user_id = $_SESSION['user']['id'] ?? null;
-            $systemLockPage->locked_at = time();
-            $systemLockPage->expires_at = time() + 300;
+            $systemLockPage->locked_at = $now;
+            $systemLockPage->expires_at = $expires;
             $systemLockPageRepo->save($systemLockPage);
             return false;
-        } else {
-            $systemLockPage = $systemLockPageRepo->current();
-            if ($systemLockPage->expired_at < time()) {
-                $systemLockPage->locked_by_user_id = $_SESSION['user']['id'] ?? null;
-                $systemLockPage->locked_at = time();
-                $systemLockPage->expires_at = time() + 300;
-                $systemLockPageRepo->save($systemLockPage);
-                return false;
-            } else {
-                $usersRepo = new UsersRepo();
-                $usersRepo->loadById($systemLockPage->locked_by_user_id);
-                $user = $usersRepo->current();
-
-                $infoMessage = __('This page is currently being edited by ');
-                $infoMessage .= htmlspecialchars($user->first_name . ' ' . $user->last_name);
-                $infoMessage .= __('. Please try again later.');
-                $_SESSION['info'] = $infoMessage;
-                return true;
-            }
         }
+
+        $systemLockPage = $systemLockPageRepo->current();
+
+        if ($systemLockPage->expires_at < $now) {
+            $systemLockPage->locked_by_user_id = $_SESSION['user']['id'] ?? null;
+            $systemLockPage->locked_at = $now;
+            $systemLockPage->expires_at = $expires;
+            $systemLockPageRepo->save($systemLockPage);
+            return false;
+        }
+
+        $usersRepo = new UsersRepo();
+        $usersRepo->loadById($systemLockPage->locked_by_user_id);
+        $user = $usersRepo->current();
+
+        $infoMessage = __('This page is currently being edited by ');
+        $infoMessage .= htmlspecialchars($user->first_name . ' ' . $user->last_name);
+        $infoMessage .= __('. Please try again later.');
+        $_SESSION['message'] = $infoMessage;
+
+        return true;
     }
 
     /**
