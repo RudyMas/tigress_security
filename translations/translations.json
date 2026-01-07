@@ -1,0 +1,26 @@
+{
+  "nl": {
+    "This page is currently being edited by ": "Deze pagina wordt momenteel bewerkt door ",
+    ". Please try again later.": ". Probeer het later opnieuw."
+  },
+  "fr": {
+    "This page is currently being edited by ": "Cette page est actuellement en cours de modification par ",
+    ". Please try again later.": ". Veuillez réessayer plus tard."
+  },
+  "de": {
+    "This page is currently being edited by ": "Diese Seite wird derzeit von ",
+    ". Please try again later.": " bearbeitet. Bitte versuchen Sie es später erneut."
+  },
+  "es": {
+    "This page is currently being edited by ": "Esta página está siendo editada actualmente por ",
+    ". Please try again later.": ". Por favor, inténtelo de nuevo más tarde."
+  },
+  "it": {
+    "This page is currently being edited by ": "Questa pagina è attualmente in fase di modifica da parte di ",
+    ". Please try again later.": ". Riprova più tardi."
+  },
+  "sv": {
+    "This page is currently being edited by ": "Denna sida redigeras för närvarande av ",
+    ". Please try again later.": ". Vänligen försök igen senare."
+  }
+}
