@@ -16,14 +16,11 @@
     "php": "^8.5"
   },
   "require-dev": {
-    "tigress/core": "*",
-    "tigress/repository": "*",
-    "tigress/users": "*"
+    "tigress/core": "*"
   },
   "autoload": {
     "psr-4": {
-      "Tigress\\": "src/",
-      "Repository\\": "src/repositories"
+      "Tigress\\": "src/"
     }
   }
 }
