@@ -3,7 +3,6 @@
 namespace Tigress;
 
 use Random\RandomException;
-use Repository\SystemLockPagesRepo;
 
 /**
  * Class Security (PHP version 8.5)
@@ -11,7 +10,7 @@ use Repository\SystemLockPagesRepo;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024-2026, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 2026.01.08.0
+ * @version 2026.02.03.0
  * @package Tigress\Security
  */
 class Security
@@ -128,7 +127,7 @@ class Security
      */
     public function verifyHash(string $password, string $salt, string $hash): bool
     {
-        return hash_equals($hash, $this->createHash($password, $salt));
+        return hash_equals($hash, hash('sha256', $password . $salt));
     }
 
     /**
