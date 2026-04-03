@@ -3,7 +3,6 @@
 namespace Tigress;
 
 use Random\RandomException;
-use Tigress\Core;
 
 /**
  * Class Security (PHP version 8.5)
