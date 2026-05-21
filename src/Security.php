@@ -10,7 +10,7 @@ use Random\RandomException;
  * @author Rudy Mas <rudy.mas@rudymas.be>
  * @copyright 2024-2026, rudymas.be. (http://www.rudymas.be/)
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version 2026.02.03.0
+ * @version 2026.05.21.0
  * @package Tigress\Security
  */
 class Security
@@ -24,7 +24,7 @@ class Security
      */
     public static function version(): string
     {
-        return '2026.01.08';
+        return '2026.05.21';
     }
 
     public function __construct()
@@ -141,7 +141,7 @@ class Security
     {
         // Break down the URL path into an array
         $referer = parse_url($urlPath);
-        $referees = explode('/', trim($referer['path'], '/')); // Trimming leading/trailing slashes
+        $referers = explode('/', trim($referer['path'], '/')); // Trimming leading/trailing slashes
 
         // Loop through each possible reference path
         foreach ($referencePaths as $referencePath) {
@@ -149,7 +149,7 @@ class Security
             $paths = explode('/', trim($referencePath, '/'));
 
             // Check if the paths match
-            if (self::pathsMatch($referees, $paths)) {
+            if (self::pathsMatch($referers, $paths)) {
                 return true;
             }
         }

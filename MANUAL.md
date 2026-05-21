@@ -126,7 +126,3 @@ Access-control methods (`checkAccess`, `checkReferer`) abort execution with a `4
 2. **CONFIG global dependency**: The constructor depends on a global `CONST` constant (`CONFIG->servers`). If you use this library outside the Tigress Framework, call `setSites()` explicitly after construction.
 
 3. **Password hashing**: `createHash()` uses plain SHA-256 without key stretching. Do **not** use for new password storage — prefer `password_hash()` / `password_verify()` with `PASSWORD_BCRYPT` or `PASSWORD_ARGON2ID`.
-
-4. **Version mismatch**: The docblock `@version` (`2026.02.03.0`) differs from `version()` return value (`2026.01.08`).
-
-5. **Typo in private methods**: Parameter `$referees` in `pathMatches()` and `pathsMatch()` is misspelled (should be `$referers` or `$segments`).
